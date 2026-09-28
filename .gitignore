@@ -1,0 +1,10 @@
+/vendor/
+.env
+/public/assets/uploads/*
+!/public/assets/uploads/.gitkeep
+/public/assets/qrcodes/*
+!/public/assets/qrcodes/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+.DS_Store
+*.log
