@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($event->title) ?> - Convite</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <?php if (!empty($event->latitude) && !empty($event->longitude)): ?>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <?php endif; ?>
 </head>
 <body class="bg-slate-100 min-h-screen">
     <div class="max-w-lg mx-auto px-4 py-8">
@@ -44,7 +48,16 @@
                         <span>📍</span>
                         <span><?= htmlspecialchars($event->location_name) ?></span>
                     </div>
+                    <?php if ($event->location_address): ?>
+                    <div class="text-sm text-slate-500 pl-7">
+                        <?= htmlspecialchars($event->location_address) ?>
+                    </div>
+                    <?php endif; ?>
                 </div>
+
+                <?php if (!empty($event->latitude) && !empty($event->longitude)): ?>
+                <div id="map" class="w-full h-52 rounded-xl border border-slate-200 mb-6 z-0"></div>
+                <?php endif; ?>
 
                 <!-- QR Code -->
                 <div class="text-center mb-8">
@@ -81,6 +94,22 @@
             Este convite é pessoal e intransferível.
         </p>
     </div>
+
+    <?php if (!empty($event->latitude) && !empty($event->longitude)): ?>
+    <script>
+        const map = L.map('map').setView([<?= $event->latitude ?>, <?= $event->longitude ?>], 16);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap',
+            maxZoom: 19
+        }).addTo(map);
+
+        L.marker([<?= $event->latitude ?>, <?= $event->longitude ?>])
+            .addTo(map)
+            .bindPopup("<strong><?= htmlspecialchars(addslashes($event->location_name)) ?></strong>")
+            .openPopup();
+    </script>
+    <?php endif; ?>
 
     <script>
         async function respond(action) {

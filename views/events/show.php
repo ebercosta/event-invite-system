@@ -1,9 +1,15 @@
 <?php
 ob_start();
+$hasCoords = !empty($event['latitude']) && !empty($event['longitude']);
 ?>
 <div class="mb-6">
     <a href="/events" class="text-sm text-blue-600 hover:underline">← Voltar para eventos</a>
 </div>
+
+<?php if ($hasCoords): ?>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<?php endif; ?>
 
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
     <?php if ($event['image_path']): ?>
@@ -27,6 +33,10 @@ ob_start();
         <p class="text-slate-700 mb-2"><strong>Local:</strong> <?= htmlspecialchars($event['location_name']) ?></p>
         <?php if ($event['location_address']): ?>
         <p class="text-slate-600 text-sm mb-4"><?= htmlspecialchars($event['location_address']) ?></p>
+        <?php endif; ?>
+
+        <?php if ($hasCoords): ?>
+        <div id="map" class="w-full h-64 rounded-lg border border-slate-200 mb-6 z-0"></div>
         <?php endif; ?>
 
         <?php if ($event['description']): ?>
@@ -55,6 +65,23 @@ ob_start();
         <div><span class="text-red-600 font-bold text-xl"><?= $declined ?></span> recusaram</div>
     </div>
 </div>
+
+<?php if ($hasCoords): ?>
+<script>
+    const map = L.map('map').setView([<?= $event['latitude'] ?>, <?= $event['longitude'] ?>], 16);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19
+    }).addTo(map);
+
+    L.marker([<?= $event['latitude'] ?>, <?= $event['longitude'] ?>])
+        .addTo(map)
+        .bindPopup("<strong><?= htmlspecialchars(addslashes($event['location_name'])) ?></strong><?= $event['location_address'] ? '<br>' . htmlspecialchars(addslashes($event['location_address'])) : '' ?>")
+        .openPopup();
+</script>
+<?php endif; ?>
+
 <?php
 $content = ob_get_clean();
 $title = $event['title'];
