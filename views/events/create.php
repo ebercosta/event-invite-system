@@ -83,11 +83,11 @@ ob_start();
 <script>
     const map = L.map('map').setView([-7.1195, -34.8450], 13);
 
-    // CartoDB Positron — gratuito, conforme política de uso (não usa tile.openstreetmap.org)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 20
+    // Esri World Street Map — gratuito, sem API key
+    // Atenção: ordem dos parâmetros é {z}/{y}/{x}
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, USGS, NOAA',
+        maxZoom: 19
     }).addTo(map);
 
     let marker = null;
