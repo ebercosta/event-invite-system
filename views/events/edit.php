@@ -43,7 +43,6 @@ $lng = $hasCoords ? $event['longitude'] : -34.8450;
         <input type="text" name="location_address" id="location_address" value="<?= htmlspecialchars($event['location_address'] ?? '') ?>" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
     </div>
 
-    <!-- Mapa interativo -->
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-2">Localização no Mapa</label>
         <p class="text-xs text-slate-500 mb-2">Clique no mapa ou arraste o marcador para ajustar</p>
@@ -91,9 +90,10 @@ $lng = $hasCoords ? $event['longitude'] : -34.8450;
 <script>
     const map = L.map('map').setView([<?= $lat ?>, <?= $lng ?>], <?= $hasCoords ? 16 : 13 ?>);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
     }).addTo(map);
 
     let marker = null;
